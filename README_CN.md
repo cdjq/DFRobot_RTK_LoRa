@@ -80,6 +80,15 @@
   sLonLat_t getLon(void);
 
 /**
+ * @fn getDataFlush
+ * @brief 获取数据是否刷新
+ * @return bool
+ * @retval True 数据刷新
+ * @retval false 数据还未刷新
+ */
+  bool getDataFlush(void);
+
+/**
  * @fn getNumSatUsed
  * @brief 获取使用的卫星数
  * @return uint8_t 类型，表示使用的卫星数

@@ -51,62 +51,61 @@ void setup()
 
 void loop()
 {
-  sTim_t utc = rtk.getUTC();
-  sTim_t date = rtk.getDate();
-  sLonLat_t lat = rtk.getLat();
-  sLonLat_t lon = rtk.getLon();
-  double high = rtk.getAlt();
-  uint8_t starUserd = rtk.getNumSatUsed();
-  double hdop = rtk.getHdop();
-  double sep = rtk.getSep();
-  uint8_t mode = rtk.getQuality();
-  uint16_t siteID = rtk.getSiteID();
-  double diftime = rtk.getDifTime();
-
-  Serial.println("");
-  Serial.print(date.year);
-  Serial.print("/");
-  Serial.print(date.month);
-  Serial.print("/");
-  Serial.print(date.date);
-  Serial.print("/");
-  Serial.print(utc.hour);
-  Serial.print(":");
-  Serial.print(utc.minute);
-  Serial.print(":");
-  Serial.print(utc.second);
-  Serial.println();
-  Serial.println((char)lat.latDirection);
-  Serial.println((char)lon.lonDirection);
-  
-  // Serial.print("lat DDMM.MMMMM = ");
-  // Serial.println(lat.latitude, 5);
-  // Serial.print(" lon DDDMM.MMMMM = ");
-  // Serial.println(lon.lonitude, 5);
-  Serial.print("lat degree = ");
-  Serial.println(lat.latitudeDegree,6);
-  Serial.print("lon degree = ");
-  Serial.println(lon.lonitudeDegree,6);
-
-  Serial.print("star userd = ");
-  Serial.println(starUserd);
-  Serial.print("alt high = ");
-  Serial.println(high);
-  Serial.print("sep  = ");
-  Serial.println(sep);
-
-  Serial.print("hdop = ");
-  Serial.println(hdop);
-  Serial.print("message mode  = ");
-  Serial.println(mode);
-  Serial.print("siteID = ");
-  Serial.println(siteID);
-  Serial.print("diftime = ");
-  Serial.println(diftime);
-  
-  Serial.println(rtk.getGnssMessage(gnGGA));
-  Serial.println(rtk.getGnssMessage(gnRMC));
-  Serial.println(rtk.getGnssMessage(gnGLL));
-  Serial.println(rtk.getGnssMessage(gnVTG));
-  delay(500);
+  bool state = rtk.getDataFlush();
+  if(state == true)
+  {
+    sTim_t utc = rtk.getUTC();
+    sTim_t date = rtk.getDate();
+    sLonLat_t lat = rtk.getLat();
+    sLonLat_t lon = rtk.getLon();
+    double high = rtk.getAlt();
+    uint8_t starUserd = rtk.getNumSatUsed();
+    double hdop = rtk.getHdop();
+    double sep = rtk.getSep();
+    uint8_t mode = rtk.getQuality();
+    uint16_t siteID = rtk.getSiteID();
+    double diftime = rtk.getDifTime();
+    Serial.println("");
+    Serial.print(date.year);
+    Serial.print("/");
+    Serial.print(date.month);
+    Serial.print("/");
+    Serial.print(date.date);
+    Serial.print("/");
+    Serial.print(utc.hour);
+    Serial.print(":");
+    Serial.print(utc.minute);
+    Serial.print(":");
+    Serial.print(utc.second);
+    Serial.println();
+    Serial.println((char)lat.latDirection);
+    Serial.println((char)lon.lonDirection);
+    // Serial.print("lat DDMM.MMMMM = ");
+    // Serial.println(lat.latitude, 5);
+    // Serial.print(" lon DDDMM.MMMMM = ");
+    // Serial.println(lon.lonitude, 5);
+    Serial.print("lat degree = ");
+    Serial.println(lat.latitudeDegree,6);
+    Serial.print("lon degree = ");
+    Serial.println(lon.lonitudeDegree,6);
+    Serial.print("star userd = ");
+    Serial.println(starUserd);
+    Serial.print("alt high = ");
+    Serial.println(high);
+    Serial.print("sep  = ");
+    Serial.println(sep);
+    Serial.print("hdop = ");
+    Serial.println(hdop);
+    Serial.print("message mode  = ");
+    Serial.println(mode);
+    Serial.print("siteID = ");
+    Serial.println(siteID);
+    Serial.print("diftime = ");
+    Serial.println(diftime);
+    Serial.println(rtk.getGnssMessage(gnGGA));
+    Serial.println(rtk.getGnssMessage(gnRMC));
+    Serial.println(rtk.getGnssMessage(gnGLL));
+    Serial.println(rtk.getGnssMessage(gnVTG));
+  }
+  delay(300);
 }

@@ -142,6 +142,7 @@ public:
 
   #define REG_I2C_ID    50     ///< uart device id
   //  32~~~80
+  #define REG_DATA_FLUSH 80
   #define REG_GGA_LEN		81
   #define REG_GGA_ALL		82
   #define REG_RMC_LEN		83
@@ -232,6 +233,15 @@ public:
  * @retval sLonLat_t.lonDirection Direction of longitude 
  */
   sLonLat_t getLon(void);
+
+/**
+ * @fn getDataFlush
+ * @brief Gets whether data is refreshed
+ * @return bool
+ * @retval True if data is refreshed
+ * @retval false if data is not refreshed
+ */
+  bool getDataFlush(void);
 
 /**
  * @fn getNumSatUsed
