@@ -149,7 +149,7 @@ void DFRobot_RTK_LoRa::setModule(eModuleMode_t mode)
     delay(50);
     _sendData[0] = mode;
     writeReg(REG_OPERATION, _sendData, 1);
-    if(mode == module_4g){
+    if(mode == eMoudle4g){
       delay(3000);
     }else{
       delay(1000);
@@ -189,29 +189,25 @@ uint32_t DFRobot_RTK_LoRa::getLoraBaud(void)
 
 uint32_t DFRobot_RTK_LoRa::baudMatch(eModuleBaud_t baud)
 {
-  if(baud == baud_2400){
-    return 2400;
-  }else if(baud == baud_4800){
-    return 4800;
-  }else if(baud == baud_9600){
+  if(baud == eBaud9600){
     return 9600;
-  }else if(baud == baud_14400){
+  }else if(baud == eBaud14400){
     return 14400;
-  }else if(baud == baud_19200){
+  }else if(baud == eBaud19200){
     return 19200;
-  }else if(baud == baud_38400){
+  }else if(baud == eBaud38400){
     return 38400;
-  }else if(baud == baud_56000){
+  }else if(baud == eBaud56000){
     return 56000;
-  }else if(baud == baud_57600){
+  }else if(baud == eBaud57600){
     return 57600;
-  }else if(baud == baud_115200){
+  }else if(baud == eBaud115200){
     return 115200;
-  }else if(baud == baud_256000){
+  }else if(baud == eBaud256000){
     return 256000;
-  }else if(baud == baud_512000){
+  }else if(baud == eBaud512000){
     return 512000;
-  }else if(baud == baud_921600){
+  }else if(baud == eBaud921600){
     return 921600;
   }else{
     return 115200;
@@ -287,10 +283,10 @@ char * DFRobot_RTK_LoRa::getGnssMessage(eGnssData_t mode)
   memset(__sourceData.gll, 0, sizeof(__sourceData.gll));
   memset(__sourceData.vtg, 0, sizeof(__sourceData.vtg));
 
-  if(mode == gnGGA){
+  if(mode == eGGA){
     readReg(REG_GGA_LEN, &len, 1);
     if(len < sizeof(__sourceData.gga)){
-      if(uartI2CFlag == UART_FLAG) {
+      if(__uartI2CFlag == UART_FLAG) {
         readReg(REG_GGA_ALL, (uint8_t *)(__sourceData.gga), len);
       }else{
         while(len){
@@ -308,10 +304,10 @@ char * DFRobot_RTK_LoRa::getGnssMessage(eGnssData_t mode)
       }
     }
     return __sourceData.gga;
-  }else if (mode == gnRMC){
+  }else if (mode == eRMC){
     readReg(REG_RMC_LEN, &len, 1);
     if(len < sizeof(__sourceData.rmc)){
-      if(uartI2CFlag == UART_FLAG) {
+      if(__uartI2CFlag == UART_FLAG) {
         readReg(REG_RMC_ALL, (uint8_t *)(__sourceData.rmc), len);
       }else{
         while(len){
@@ -329,10 +325,10 @@ char * DFRobot_RTK_LoRa::getGnssMessage(eGnssData_t mode)
       }
     }
     return __sourceData.rmc;
-  }else if (mode == gnGLL){
+  }else if (mode == eGLL){
     readReg(REG_GLL_LEN, &len, 1);
     if(len < sizeof(__sourceData.gll)){
-      if(uartI2CFlag == UART_FLAG) {
+      if(__uartI2CFlag == UART_FLAG) {
         readReg(REG_GLL_ALL, (uint8_t *)(__sourceData.gll), len);
       }else{
         while(len){
@@ -350,10 +346,10 @@ char * DFRobot_RTK_LoRa::getGnssMessage(eGnssData_t mode)
       }
     }
     return __sourceData.gll;
-  }else{    //(mode == gnVTG){
+  }else{    //(mode == eVTG){
     readReg(REG_VTG_LEN, &len, 1);
     if(len < sizeof(__sourceData.vtg)){
-      if(uartI2CFlag == UART_FLAG) {
+      if(__uartI2CFlag == UART_FLAG) {
         readReg(REG_VTG_ALL, (uint8_t *)(__sourceData.vtg), len);
       }else{
         while(len){
@@ -380,6 +376,7 @@ uint16_t DFRobot_RTK_LoRa::getGnssLen(void)
   uint8_t _sendData[TEMP_LEN] = {0xAA};
   // enter all data mode
   writeReg(REG_ALL_MODE, _sendData, 1);
+  delay(10);
   while(1){
     readReg(REG_ALL_MODE, _sendData, 1);
     delay(100);
@@ -401,7 +398,7 @@ void DFRobot_RTK_LoRa::getAllGnss(void)
   uint16_t old_len = len;
   
   uint16_t i = 0;
-  if(uartI2CFlag == UART_FLAG) {
+  if(__uartI2CFlag == UART_FLAG) {
     uint8_t templen = len / 250;
     if(len % 250 != 0){
       templen += 1;
@@ -463,17 +460,17 @@ void DFRobot_RTK_LoRa::setCallback(void (*call)(char *, uint8_t))
 
 DFRobot_RTK_LoRa_I2C::DFRobot_RTK_LoRa_I2C(TwoWire *pWire, uint8_t addr)
 {
-  _pWire = pWire;
-  this->_I2C_addr = addr;
-  uartI2CFlag = I2C_FLAG;
+  __pWire = pWire;
+  this->__I2C_addr = addr;
+  __uartI2CFlag = I2C_FLAG;
 }
 
 bool DFRobot_RTK_LoRa_I2C::begin()
 {
-  _pWire->begin();
-  _pWire->setClock(100000);
-  _pWire->beginTransmission(_I2C_addr);
-  if(_pWire->endTransmission() == 0){
+  __pWire->begin();
+  //__pWire->setClock(100000);
+  __pWire->beginTransmission(__I2C_addr);
+  if(__pWire->endTransmission() == 0){
     return true;
   }else{
     return false;
@@ -482,12 +479,12 @@ bool DFRobot_RTK_LoRa_I2C::begin()
 
 void DFRobot_RTK_LoRa_I2C::writeReg(uint8_t reg, uint8_t *data, uint8_t len)
 {
-  _pWire->beginTransmission(this->_I2C_addr);
-  _pWire->write(reg);
+  __pWire->beginTransmission(this->__I2C_addr);
+  __pWire->write(reg);
   for(uint8_t i = 0; i < len; i++){
-    _pWire->write(data[i]);
+    __pWire->write(data[i]);
   }
-  _pWire->endTransmission();
+  __pWire->endTransmission();
 }
 
 int16_t DFRobot_RTK_LoRa_I2C::readReg(uint8_t reg, uint8_t *data, uint8_t len)
@@ -497,28 +494,28 @@ int16_t DFRobot_RTK_LoRa_I2C::readReg(uint8_t reg, uint8_t *data, uint8_t len)
   while(length)
   {
     if(length > 32){
-      _pWire->beginTransmission(this->_I2C_addr);
-      _pWire->write(reg);
-      if(_pWire->endTransmission() != 0){
+      __pWire->beginTransmission(this->__I2C_addr);
+      __pWire->write(reg);
+      if(__pWire->endTransmission() != 0){
         return -1;
       }
-      _pWire->requestFrom((uint8_t)this->_I2C_addr,(uint8_t)32);
-      while (_pWire->available()){
+      __pWire->requestFrom((uint8_t)this->__I2C_addr,(uint8_t)32);
+      while (__pWire->available()){
         //if(i < len-1){
-          data[i++]=_pWire->read();
+          data[i++]=__pWire->read();
         //}
       }
       length -= 32;
     }else{
-      _pWire->beginTransmission(this->_I2C_addr);
-      _pWire->write(reg);
-      if(_pWire->endTransmission() != 0){
+      __pWire->beginTransmission(this->__I2C_addr);
+      __pWire->write(reg);
+      if(__pWire->endTransmission() != 0){
         return -1;
       }
-      _pWire->requestFrom((uint8_t)this->_I2C_addr,(uint8_t)length);
-      while (_pWire->available()){
+      __pWire->requestFrom((uint8_t)this->__I2C_addr,(uint8_t)length);
+      while (__pWire->available()){
         //if(i < len-1){
-          data[i++]=_pWire->read();
+          data[i++]=__pWire->read();
         //}
       }
       length = 0;
@@ -532,18 +529,18 @@ int16_t DFRobot_RTK_LoRa_I2C::readReg(uint8_t reg, uint8_t *data, uint8_t len)
   DFRobot_RTK_LoRa_UART::DFRobot_RTK_LoRa_UART(SoftwareSerial *sSerial, uint32_t Baud)
   {
     this->_serial = sSerial;
-    this->_baud = Baud;
-    uartI2CFlag = UART_FLAG;
-    _serial->begin(this->_baud);
+    this->__baud = Baud;
+    __uartI2CFlag = UART_FLAG;
+    _serial->begin(this->__baud);
   }
 #else
   DFRobot_RTK_LoRa_UART::DFRobot_RTK_LoRa_UART(HardwareSerial *hSerial, uint32_t Baud ,uint8_t txpin, uint8_t rxpin)
   {
     this->_serial = hSerial;
-    this->_baud = Baud;
-    uartI2CFlag = UART_FLAG;
-    this->_txpin = txpin;
-    this->_rxpin = rxpin;
+    this->__baud = Baud;
+    __uartI2CFlag = UART_FLAG;
+    this->__txpin = txpin;
+    this->__rxpin = rxpin;
   }
 #endif
 
@@ -551,13 +548,18 @@ bool DFRobot_RTK_LoRa_UART::begin()
 {
   uint8_t _sendData[TEMP_LEN] = {0};
   #ifdef ESP32
-    _serial->begin(this->_baud, SERIAL_8N1, _txpin, _rxpin);
+    _serial->begin(this->__baud, SERIAL_8N1, __txpin, __rxpin);
     delay(100);
   #elif defined(ARDUINO_AVR_UNO) || defined(ESP8266)
     // nothing use software
   #else
-    _serial->begin(this->_baud);  // M0 cannot create a begin in a construct
+    _serial->begin(this->__baud);  // M0 cannot create a begin in a construct
   #endif
+
+  while(_serial->available()){
+    _serial->read();
+  }
+
   this->readReg (REG_I2C_ID, _sendData, 1);
   if(_sendData[0] == DEVICE_ADDR){
     return true;
@@ -584,9 +586,10 @@ int16_t DFRobot_RTK_LoRa_UART::readReg(uint8_t reg, uint8_t *data, uint8_t len)
   _serial->write((uint8_t)reg & 0x7F);
   _serial->write(len);
   _serial->write(0xAA);
+  delay(5);
   uint32_t nowtime = millis();
   while(millis() - nowtime < TIME_OUT){
-    while(_serial->available() > 0){
+    while(_serial->available()){
       data[i++] = _serial->read();
       if(i == len) { _serial->flush(); return 0; }
     }

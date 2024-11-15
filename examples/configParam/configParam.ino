@@ -24,18 +24,18 @@ void setup()
 
   /**
    * | Support Baud | UNO/ESP8266 | Leonardo/Mega2560 | ESP32 |  M0 |
-   * | baud_9600    |      √      |         √         |   √   |  √  |
-   * | baud_14400   |      √      |         √         |   √   |  √  |
-   * | baud_19200   |      √      |         √         |   √   |  √  |
-   * | baud_38400   |      √      |         √         |   √   |  √  |
-   * | baud_56000   |      √      |         √         |   √   |  √  |
-   * | baud_57600   |      √      |         √         |   √   |  √  |
-   * | baud_115200  |             |         √         |   √   |  √  |
-   * | baud_256000  |             |                   |   √   |  √  |
-   * | baud_512000  |             |                   |   √   |  √  |
-   * | baud_921600  |             |                   |   √   |  √  |
+   * | eBaud9600    |      √      |         √         |   √   |  √  |
+   * | eBaud14400   |      √      |         √         |   √   |  √  |
+   * | eBaud19200   |      √      |         √         |   √   |  √  |
+   * | eBaud38400   |      √      |         √         |   √   |  √  |
+   * | eBaud56000   |      √      |         √         |   √   |  √  |
+   * | eBaud57600   |      √      |         √         |   √   |  √  |
+   * | eBaud115200  |             |         √         |   √   |  √  |
+   * | eBaud256000  |             |                   |   √   |  √  |
+   * | eBaud512000  |             |                   |   √   |  √  |
+   * | eBaud921600  |             |                   |   √   |  √  |
    */
-  rtk.setModuleBaud(baud_115200);
+  rtk.setModuleBaud(eBaud115200);
 
   Serial.print("module mode = ");
   Serial.println(rtk.getModule());

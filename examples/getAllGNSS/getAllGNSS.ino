@@ -50,8 +50,8 @@ void setup()
   }
   Serial.println("Device connected !");
 
-  rtk.setModule(module_lora);
-  while(rtk.getModule() != module_lora){
+  rtk.setModule(eMoudleLora);
+  while(rtk.getModule() != eMoudleLora){
     Serial.println("Module type is not lora!  please wait!");
     delay(1000);
   }
