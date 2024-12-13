@@ -577,5 +577,6 @@ class DFRobot_RTK_LoRa_UART(DFRobot_RTK_LoRa):
       else:
         return list(recv)
     else:
+      _recv = [0]*length
       print("Timeout: Not enough data read.")
-      return recv
+      return _recv

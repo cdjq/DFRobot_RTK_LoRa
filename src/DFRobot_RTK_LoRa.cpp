@@ -534,7 +534,7 @@ int16_t DFRobot_RTK_LoRa_I2C::readReg(uint8_t reg, uint8_t *data, uint8_t len)
     _serial->begin(this->__baud);
   }
 #else
-  DFRobot_RTK_LoRa_UART::DFRobot_RTK_LoRa_UART(HardwareSerial *hSerial, uint32_t Baud ,uint8_t txpin, uint8_t rxpin)
+  DFRobot_RTK_LoRa_UART::DFRobot_RTK_LoRa_UART(HardwareSerial *hSerial, uint32_t Baud ,uint8_t rxpin, uint8_t txpin)
   {
     this->_serial = hSerial;
     this->__baud = Baud;
